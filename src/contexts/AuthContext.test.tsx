@@ -1,0 +1,2 @@
+import {test,expect} from 'vitest';import {createElement} from 'react';import {renderToStaticMarkup} from 'react-dom/server';import {AuthContextProvider} from './AuthContext';
+test('the auth provider renders the application even before login',()=>{expect(renderToStaticMarkup(createElement(AuthContextProvider,{children:createElement('p',null,'Application visible')}))).toContain('Application visible');});
