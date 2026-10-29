@@ -1,4 +1,5 @@
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import {useState} from 'react';
 
 import illustrationImg from '../assets/images/illustration.svg';
 import logoImg from '../assets/images/logo.svg';
@@ -10,26 +11,19 @@ import { useAuth } from '../hooks/useAuth';
 
 export function Home() {
 
-    const history = useHistory();
+    const navigate = useNavigate();
+    const [error,setError] = useState('');
     const {user, signInWithGoogle} = useAuth();
 
-    const handleCreateRoom = async () => {
-
-        if(!user){
-           await signInWithGoogle();
-        }
-
-        history.push('/rooms/new');
-       
-    }
+    const handleCreateRoom = async () => { try {setError('');if(!user)await signInWithGoogle();navigate('/rooms/new');}catch(error){setError(error instanceof Error ? error.message : 'Não foi possível entrar.');} };
 
 
     return (
         <div id='page-auth'>
             <aside>
-                <img src={illustrationImg} alt='ilustração de perguntas e respostas' />
+                <img src={illustrationImg} alt='ilustraÃ§Ã£o de perguntas e respostas' />
                 <strong>Crie salas de Q&amp;A ao-vivo</strong>
-                <p>Tire as dúvidas da sua audiência em tempo-real</p>
+                <p>Tire as dÃºvidas da sua audiÃªncia em tempo-real</p>
             </aside>
             <main>
                 <div className='main-content'>
@@ -39,10 +33,11 @@ export function Home() {
                         Crie sua sala com o google
                     </button>
                     <div className='separetor'>Ou entre em uma sala</div>
-                    <form>
+                    {error && <p role='alert'>{error}</p>}
+                    <form onSubmit={event=>{event.preventDefault();setError('Entrada em salas ainda não implementada neste protótipo.');}}>
                         <input
                             type='text'
-                            placeholder='Digite o código da sala'
+                            placeholder='Digite o cÃ³digo da sala'
                         />
                         <Button type='submit'>
                             Entrar na sala
